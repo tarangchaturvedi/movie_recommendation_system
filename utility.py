@@ -112,7 +112,7 @@ def evaluate_model_SRP(test_preds, model_name, models_evaluation_test):
     
     models_evaluation_test[f"{model_name}"] = test
 ###################################################################
-def run_xgboost(algo, x_train, y_train, x_test, y_test, model_name):
+def run_xgboost(algo, x_train, y_train, x_test, y_test, model_name, models_evaluation_train, models_evaluation_test):
     train_results = dict()
     test_results = dict()
     print(f'Training the {model_name} model...')
@@ -129,20 +129,21 @@ def run_xgboost(algo, x_train, y_train, x_test, y_test, model_name):
     train_results = {'rmse': rmse_train,
                     'mape' : mape_train,
                     'predictions' : y_train_pred}
-    
+    models_evaluation_train[f"{model_name}"] = train_results
+
     y_test_pred = algo.predict(x_test) 
     rmse_test, mape_test = get_error_metrics(y_true=y_test.values, y_pred=y_test_pred)
     
     test_results = {'rmse': rmse_test,
                     'mape' : mape_test,
                     'predictions':y_test_pred}
-    
+    models_evaluation_test[f"{model_name}"] = test_results
+
     print('Validation Data:-')
     print('RMSE : ', rmse_test)
     print('MAPE : ', mape_test)
     print('-'*30 + '\n')
 
-    return train_results, test_results
     #############################################################################
 # it is just to makesure that all of our algorithms should produce same results
 # everytime they run...
@@ -164,7 +165,7 @@ def get_errors(predictions, print_them=False):
 
     return rmse, mape*100
 ###################################################################
-def run_surprise(algo, trainset, testset, model_name): 
+def run_surprise(algo, trainset, testset, model_name, models_evaluation_train, models_evaluation_test, x_train, x_test):
     
     train = dict()
     test = dict()
@@ -185,6 +186,7 @@ def run_surprise(algo, trainset, testset, model_name):
     train['rmse'] = train_rmse
     train['mape'] = train_mape
     train['predictions'] = train_pred_ratings
+    models_evaluation_train[f"{model_name}"] = train
     
     #------------ Evaluating Test data---------------#
     test_preds = algo.test(testset)
@@ -200,8 +202,11 @@ def run_surprise(algo, trainset, testset, model_name):
     test['rmse'] = test_rmse
     test['mape'] = test_mape
     test['predictions'] = test_pred_ratings
+    models_evaluation_test[f"{model_name}"] = test
     
-    return train, test
+    x_train[f"{model_name}"] = models_evaluation_train[f"{model_name}"]['predictions']
+    x_test[f"{model_name}"] = models_evaluation_test[f"{model_name}"]['predictions']
+    
 
 def comparing_models(models_evaluation):
     print("-------comparing models : using RMSE--------")
