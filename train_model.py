@@ -15,18 +15,19 @@ def train_model(file_path):
     sparse_matrix = to_sparse_matrix(df)
 
     #choose sample data set: no_users and no_movies
-    no_users, no_movies = 10000, 1000
+    no_users, no_movies = 1000, 100
     sample_sparse_matrix = get_sample_sparse_matrix(sparse_matrix, no_users, no_movies)
 
     sample_averages = {}
     adding_average_ratings(sample_sparse_matrix, sample_averages)
 
     reg_data = data_featurizing(sample_sparse_matrix, sample_averages)
-    #reg_train, reg_test = train_test_split(reg_data,test_size=0.2
-    
-    surprise_data = surprise_data_creation(reg_data, type = 'train')
+    reg_train, reg_test = train_test_split(reg_data, test_size = 0.3, random_state=42)
 
-    models_evaluation = {}
-    train_models(reg_data, models_evaluation, surprise_data)
+    trainset, testset = surprise_data_creation(reg_train, reg_test)
 
-    comparing_models(models_evaluation)
+    models_evaluation_train = {}
+    models_evaluation_test = {}
+    train_models(reg_train, reg_test, models_evaluation_train, models_evaluation_test, trainset, testset)
+
+    comparing_models(models_evaluation_test)
