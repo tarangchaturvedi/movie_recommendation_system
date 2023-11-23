@@ -15,7 +15,7 @@ def test_models(reg_test, models_evaluation_test, testset):
     test_preds = bsl_algo.test(testset)
     evaluate_model_SRP(test_preds, 'bsl_algo', models_evaluation_test)
     #################################################
-    x_test['bslpr'] = models_evaluation_test['bsl_algo']['predictions']
+    x_test['bsl_algo'] = models_evaluation_test['bsl_algo']['predictions']
 
     xgb_bsl = joblib.load('xgb_bsl.joblib')
     y_pred = xgb_bsl.predict(x_test)
