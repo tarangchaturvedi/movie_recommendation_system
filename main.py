@@ -2,7 +2,7 @@ import warnings
 warnings.filterwarnings('ignore')
 import argparse
 from train_model import train_model
-from test_model import test_models
+from test_model import test_model
 
 
 def get_args():
@@ -21,8 +21,8 @@ if __name__ == "__main__":
         train_model(args.train_file)
     elif args.mode == "test":
         if args.prediction_file is not None:
-            test_models(args.test_file)
+            test_model(args.test_file)
         else:
-            test_models(args.test_file)
+            test_model(args.test_file)
     else:
         print("wrong mode")
