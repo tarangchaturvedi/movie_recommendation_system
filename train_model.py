@@ -15,7 +15,7 @@ def train_model(file_path):
     sparse_matrix = to_sparse_matrix(df)
 
     #choose sample data set: no_users and no_movies
-    no_users, no_movies = 1000, 100
+    no_users, no_movies = 5000, 500
     sample_sparse_matrix = get_sample_sparse_matrix(sparse_matrix, no_users, no_movies)
 
     sample_averages = {}
