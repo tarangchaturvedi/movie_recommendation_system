@@ -40,7 +40,6 @@ This recommendation system pipeline is designed to predict movie ratings given b
 
 ## How to Run
 
-### Train Model
-
 ```bash
 python main.py --mode=train --train_file=<training file path>
+python main.py --mode=test --test_file=<test file path>
