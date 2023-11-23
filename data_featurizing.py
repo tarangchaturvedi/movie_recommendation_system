@@ -6,8 +6,8 @@ from scipy import sparse
 def data_featurizing(sample_sparse_matrix, sample_averages):
     sample_users, sample_movies, sample_ratings = sparse.find(sample_sparse_matrix)
 
-    print('preparing {} tuples for the dataset..\n'.format(len(sample_ratings)))
-    with open('reg_train.csv', mode='w') as reg_data_file:
+    print('--------preparing {} tuples for the dataset--------'.format(len(sample_ratings)))
+    with open('reg_data.csv', mode='w') as reg_data_file:
         count = 0
         st = datetime.now()
         for (user, movie, rating)  in zip(sample_users, sample_movies, sample_ratings):
@@ -53,7 +53,8 @@ def data_featurizing(sample_sparse_matrix, sample_averages):
             if (count)%10000 == 0:
                 print("Done for {} rows----- {}".format(count, datetime.now() - st))
 
-    print("readong from csv file_____________")
-    reg_train = pd.read_csv('reg_train.csv', names = ['user', 'movie', 'GAvg', 'sur1', 'sur2', 'sur3', 'sur4', 'sur5','smr1', 'smr2', 'smr3', 'smr4', 'smr5', 'UAvg', 'MAvg', 'rating'], header=None)
+    print("-------reading from csv file--------")
+    print('-'*30 + '\n')
+    reg_data = pd.read_csv('reg_data.csv', names = ['user', 'movie', 'GAvg', 'sur1', 'sur2', 'sur3', 'sur4', 'sur5','smr1', 'smr2', 'smr3', 'smr4', 'smr5', 'UAvg', 'MAvg', 'rating'], header=None)
 
-    return reg_train
+    return reg_data
