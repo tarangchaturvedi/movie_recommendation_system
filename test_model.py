@@ -1,11 +1,8 @@
 import warnings
-from model_training import train_models
-from sklearn.model_selection import train_test_split
-from utility import read_csv, clean_data, sort_datetime, to_sparse_matrix, adding_average_ratings, comparing_models, get_sample_sparse_matrix
+from utility import read_csv, clean_data, sort_datetime, to_sparse_matrix, adding_average_ratings, comparing_models, get_sample_sparse_matrix, evaluate_model_XGB, evaluate_model_SRP
 from data_featurizing import data_featurizing
-from models_testing import test_models
 
-def test_model(file_path):
+def test_model(file_path, model_path):
     warnings.simplefilter(action='ignore')    
     df = read_csv(file_path)
 
@@ -22,10 +19,12 @@ def test_model(file_path):
 
     reg_test = data_featurizing(sample_sparse_matrix, sample_averages)
     
-    testset = list(zip(reg_test.user.values, reg_test.movie.values, reg_test.rating.values))
+    x_test = reg_test.drop(['user','movie','rating'], axis=1)
+    y_test = reg_test['rating']
     
-    models_evaluation_test = {}
-
-    test_models(reg_test, models_evaluation_test, testset)
-
-    comparing_models(models_evaluation_test)
+    test_predictions = {}
+    if('X' in model_path):
+        evaluate_model_XGB(x_test,y_test, model_path)
+    else:
+        testset = list(zip(reg_test.user.values, reg_test.movie.values, reg_test.rating.values))
+        evaluate_model_SRP(testset, model_path)
